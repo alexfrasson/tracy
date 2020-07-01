@@ -488,6 +488,8 @@ bool View::DrawImpl()
         keepOpenPtr = &keepOpen;
     }
 
+    ImGuiViewport* viewport = ImGui::GetMainViewport();
+    
 #ifndef TRACY_NO_ROOT_WINDOW
     if( !m_titleSet && m_stcb )
     {
@@ -495,7 +497,6 @@ bool View::DrawImpl()
         m_stcb( m_worker.GetCaptureName().c_str() );
     }
 
-    ImGuiViewport* viewport = ImGui::GetMainViewport();
     {
         auto& style = ImGui::GetStyle();
         const auto wrPrev = style.WindowRounding;
@@ -517,10 +518,8 @@ bool View::DrawImpl()
         style.Colors[ImGuiCol_WindowBg] = ImVec4( 0.11f, 0.11f, 0.08f, 1.f );
     }
 #else
-    char tmp[2048];
-    sprintf( tmp, "%s###Profiler", m_worker.GetCaptureName().c_str() );
     ImGui::SetNextWindowSize( ImVec2( 1550, 800 ), ImGuiCond_FirstUseEver );
-    ImGui::Begin( tmp, keepOpenPtr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoBringToFrontOnFocus );
+    ImGui::Begin( "Profiler###Profiler", keepOpenPtr, ImGuiWindowFlags_NoScrollbar );
 #endif
 
     if( !m_staticView )
